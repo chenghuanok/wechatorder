@@ -20,6 +20,8 @@ public class LoggerTest {
 
     @Test
     public void test1() {
-      logger.info("logger test!!!");
+      logger.info("logger info!!!");
+      logger.error("logger error!!!");
+      logger.debug("logger debug!!!");
     }
 }
