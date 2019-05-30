@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author 程欢
@@ -30,10 +32,19 @@ public class IProductCategoryDaoTest {
     public void saveProductCateGory(){
         final ProductCategory productCategory=new ProductCategory();
         final Date date=new Date();
-        productCategory.setCategoryName("热销产品");
-        productCategory.setCategoryType(1);
+        productCategory.setCategoryName("服饰");
+        productCategory.setCategoryType(3);
         productCategory.setCreateTime(date);
         productCategory.setUpdateTime(date);
         productCategoryDao.save(productCategory);
+    }
+
+    @Test
+    public void getProductCategoryList(){
+       final List<Integer> categoryTypeList = Arrays.asList(1,3);
+       final List<ProductCategory> productCategoryList = productCategoryDao.findByCategoryTypeIn(categoryTypeList);
+       productCategoryList.forEach(ele->{
+           System.out.println("类目名称："+ele.getCategoryName());
+       });
     }
 }

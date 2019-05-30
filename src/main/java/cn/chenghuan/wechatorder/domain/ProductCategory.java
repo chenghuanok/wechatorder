@@ -2,6 +2,7 @@ package cn.chenghuan.wechatorder.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 import lombok.experimental.Accessors;
 import javax.persistence.*;
 import java.io.Serializable;
@@ -17,6 +18,7 @@ import java.util.Date;
 @Getter
 @Setter
 @Accessors(chain = true)
+@ToString
 public class ProductCategory implements Serializable {
 
     /**
