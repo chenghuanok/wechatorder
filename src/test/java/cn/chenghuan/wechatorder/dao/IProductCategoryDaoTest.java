@@ -43,8 +43,8 @@ public class IProductCategoryDaoTest {
     public void getProductCategoryList(){
        final List<Integer> categoryTypeList = Arrays.asList(1,3);
        final List<ProductCategory> productCategoryList = productCategoryDao.findByCategoryTypeIn(categoryTypeList);
-       productCategoryList.forEach(ele->{
-           System.out.println("类目名称："+ele.getCategoryName());
-       });
+       productCategoryList.forEach(ele->
+           System.out.println("类目名称："+ele.getCategoryName())
+       );
     }
 }
