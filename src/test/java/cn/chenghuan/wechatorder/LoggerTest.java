@@ -23,5 +23,6 @@ public class LoggerTest {
       logger.info("logger info!!!");
       logger.error("logger error!!!");
       logger.debug("logger debug!!!");
+      System.out.println(logger.isDebugEnabled());
     }
 }
