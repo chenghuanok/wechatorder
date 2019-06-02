@@ -10,7 +10,7 @@ import java.util.Date;
 
 /**
  * @author 程欢
- * @Description TODO
+ * @Description 商品类目实体
  * @Date 2019/5/29 22:09
  */
 @Entity
@@ -25,7 +25,7 @@ public class ProductCategory implements Serializable {
      * 主键GID
      */
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "GID",nullable = false)
     private Integer gid;
     /**

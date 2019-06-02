@@ -12,7 +12,7 @@ import java.util.List;
  * @Date 2019/5/29 22:22
  */
 @Repository
-public interface IProductCategoryDao extends JpaRepository<ProductCategory,String> {
+public interface IProductCategoryDao extends JpaRepository<ProductCategory,Integer> {
 
     /**
      * 查找符合条件的产品类目
