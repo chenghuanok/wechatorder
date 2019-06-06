@@ -1,6 +1,5 @@
 package cn.chenghuan.wechatorder.aop;
 
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.slf4j.Logger;
@@ -24,19 +23,18 @@ public class MethodExecuteTimeAspect {
     @Pointcut("@annotation(cn.chenghuan.wechatorder.annotation.MethodExecuteTime)")
     public void executeTime(){}
 
-    @After("executeTime()")
-    public void  around(final JoinPoint joinPoint)throws  Throwable{
+    @Around("executeTime()")
+    public void  around(final ProceedingJoinPoint joinPoint)throws  Throwable{
         System.out.println("进入。。。。。。。。aop");
         //获取方法进入前时间
         final long startTime = System.currentTimeMillis();
         //执行方法
-        //Object obj = joinPoint.proceed();
+        joinPoint.proceed();
         // 方法执行时间
         final long executeTime1 = System.currentTimeMillis() - startTime;
-       // final Object[] args = joinPoint.getArgs();
+        final Object[] args = joinPoint.getArgs();
         if(logger.isInfoEnabled()){
-            logger.info("方法"+ "执行时间为："+executeTime1);
+            logger.info("方法"+ args[0]+"执行时间为："+executeTime1);
         }
-        //return obj;
     }
 }

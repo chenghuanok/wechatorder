@@ -1,5 +1,6 @@
 package cn.chenghuan.wechatorder.service.impl;
 
+import cn.chenghuan.wechatorder.annotation.MethodExecuteTime;
 import cn.chenghuan.wechatorder.dao.IProductCategoryDao;
 import cn.chenghuan.wechatorder.domain.ProductCategory;
 import cn.chenghuan.wechatorder.service.IProductCategoryService;
@@ -29,7 +30,9 @@ public class ProductCategoryService implements IProductCategoryService {
      * @return List<ProductCategory>
      */
     @Override
+    @MethodExecuteTime
     public List<ProductCategory> findByCategoryTypeIn(final List<Integer> categoryTypeList) {
-        return productCategoryDao.findByCategoryTypeIn(categoryTypeList);
+        List<ProductCategory> productCategoryList = productCategoryDao.findByCategoryTypeIn(categoryTypeList);
+        return productCategoryList;
     }
 }

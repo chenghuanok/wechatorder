@@ -1,5 +1,6 @@
 package cn.chenghuan.wechatorder.service.impl;
 
+import cn.chenghuan.wechatorder.annotation.MethodExecuteTime;
 import cn.chenghuan.wechatorder.service.IProductInfoService;
 import org.springframework.stereotype.Service;
 
