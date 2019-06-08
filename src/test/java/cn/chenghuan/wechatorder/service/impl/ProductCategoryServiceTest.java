@@ -1,5 +1,6 @@
 package cn.chenghuan.wechatorder.service.impl;
 
+
 import cn.chenghuan.wechatorder.domain.ProductCategory;
 import cn.chenghuan.wechatorder.service.IProductCategoryService;
 import org.junit.Assert;
