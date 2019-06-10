@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * @author 程欢
- * @Description TODO
+ * @Description 商品DAO
  * @Date 2019/6/2 19:51
  */
 @Repository

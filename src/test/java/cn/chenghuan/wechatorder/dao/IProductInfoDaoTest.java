@@ -30,8 +30,7 @@ public class IProductInfoDaoTest {
     public void saveProductInfoTest(){
          final ProductInfo productInfo = new ProductInfo();
          final Date date = new Date();
-         System.out.println(UUID.randomUUID().toString());
-         productInfo.setGid(UUID.randomUUID().toString());
+         productInfo.setGid(UUID.randomUUID().toString().replace("-",""));
          productInfo.setProductName("NIKE");
          productInfo.setProductPrice(new BigDecimal(555.82));
          productInfo.setProductStock(200);

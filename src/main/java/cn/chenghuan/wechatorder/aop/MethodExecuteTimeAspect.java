@@ -2,7 +2,6 @@ package cn.chenghuan.wechatorder.aop;
 
 import cn.chenghuan.wechatorder.annotation.MethodExecuteTime;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.Signature;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
