@@ -14,8 +14,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import static org.junit.Assert.*;
-
 /**
  * @author 程欢
  * @Description TODO
