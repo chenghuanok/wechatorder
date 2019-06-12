@@ -30,7 +30,6 @@ public class ProductCategoryService implements IProductCategoryService {
      * @return List<ProductCategory>
      */
     @Override
-    @MethodExecuteTime
     public List<ProductCategory> findByCategoryTypeIn(final List<Integer> categoryTypeList) {
         List<ProductCategory> productCategoryList = productCategoryDao.findByCategoryTypeIn(categoryTypeList);
         return productCategoryList;

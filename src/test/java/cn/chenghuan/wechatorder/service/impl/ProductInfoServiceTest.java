@@ -35,12 +35,12 @@ public class ProductInfoServiceTest {
         final ProductInfo productInfo = new ProductInfo();
         final Date date = new Date();
         productInfo.setGid(UUID.randomUUID().toString().replace("-",""));
-        productInfo.setProductName("825男士服装");
+        productInfo.setProductName("李宁男士服装");
         productInfo.setProductPrice(new BigDecimal(666.82));
-        productInfo.setProductStock(200);
-        productInfo.setProductDescription("超级好看的男士休闲服");
+        productInfo.setProductStock(300);
+        productInfo.setProductDescription("超级好看的李宁男士休闲服");
         productInfo.setProductIcon("https://www.baidu.com/");
-        productInfo.setProductStatus(ProductInfoStatusEnum.DOWN.getCode());
+        productInfo.setProductStatus(ProductInfoStatusEnum.UP.getCode());
         productInfo.setCategoryType(3);
         productInfo.setCreateTime(date);
         productInfo.setUpdateTime(date);

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.Accessors;
 
 import javax.validation.metadata.ValidateUnwrappedValue;
 import java.io.Serializable;
@@ -17,6 +18,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @ToString
+@Accessors(chain = true)
 public class ProductInfoVO implements Serializable {
 
     /**
