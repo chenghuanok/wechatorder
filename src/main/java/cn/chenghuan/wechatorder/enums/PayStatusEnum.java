@@ -1,10 +1,13 @@
 package cn.chenghuan.wechatorder.enums;
 
+import lombok.Getter;
+
 /**
  * @author 程欢
  * @Description 支付状态枚举
  * @Date 2019/6/16 21:19
  */
+@Getter
 public enum PayStatusEnum {
 
     /**
