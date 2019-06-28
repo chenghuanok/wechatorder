@@ -7,13 +7,10 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-
-import static org.junit.Assert.*;
 
 /**
  * @author 程欢
@@ -45,7 +42,7 @@ public class IOrderDetailDaoTest {
 
     @Test
     public void findByOrderId() {
-      List<OrderDetail> orderDetailList = orderDetailDao.findByOrderId("123");
+      final List<OrderDetail> orderDetailList = orderDetailDao.findByOrderId("123");
       Assert.assertNotNull(orderDetailList);
     }
 }
