@@ -17,7 +17,7 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-public class OrderrDTO implements Serializable {
+public class OrderDTO implements Serializable {
     /**
      * 订单GID
      */

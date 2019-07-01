@@ -1,6 +1,6 @@
 package cn.chenghuan.wechatorder.service;
 
-import cn.chenghuan.wechatorder.dto.OrderrDTO;
+import cn.chenghuan.wechatorder.dto.OrderDTO;
 
 /**
  * @author 程欢
@@ -11,7 +11,7 @@ public interface IOrderService {
 
     /**
      * 创建订单
-     * @param orderrDTO
+     * @param orderDTO
      */
-    void createOrder(final OrderrDTO orderrDTO);
+    void createOrder(final OrderDTO orderDTO);
 }

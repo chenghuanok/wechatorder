@@ -19,4 +19,18 @@ public interface IProductInfoDao extends JpaRepository<ProductInfo,String> {
      * @return List<ProductInfo>
      */
     List<ProductInfo> findByProductStatus(final Integer productStatus);
+
+    /**
+     * 查询对应Id的商品
+     * @param gids
+     * @return List<ProductInfo>i
+     */
+    List<ProductInfo> findByGidIn(final List<String> gids);
+
+    /**
+     * 根据GID查询对应的商品
+     * @param gid
+     * @return
+     */
+    ProductInfo findByGid(final String gid);
 }
