@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -64,10 +66,16 @@ public class ProductInfoService implements IProductInfoService {
     @Override
     public void decreaseProductStock(final List<CartDTO> cartDTOS) {
        final List<String> productGids = cartDTOS.stream().map(CartDTO::getProductId).collect(Collectors.toList());
+       //商品gid和商品数量对应
+       final Map<String,Integer> productIdAndAmountMap = new HashMap<>(cartDTOS.size());
+       cartDTOS.forEach(ele->
+           productIdAndAmountMap.put(ele.getProductId(),ele.getProductQuantity())
+       );
        final List<ProductInfo> productInfoList = findByIds(productGids);
        final List<ProductInfo> newProductInfoList = new ArrayList<>();
        for (int i = 0; i <productInfoList.size() ; i++) {
-           Integer productStock = productInfoList.get(i).getProductStock()-cartDTOS.get(i).getProductQuantity();
+           Integer productStock = productInfoList.get(i).getProductStock()-
+                   productIdAndAmountMap.get(productInfoList.get(i).getGid());
            productInfoList.get(i).setProductStock(productStock);
            newProductInfoList.add(productInfoList.get(i));
        }

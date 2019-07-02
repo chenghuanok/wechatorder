@@ -14,12 +14,10 @@ import cn.chenghuan.wechatorder.service.IOrderService;
 import cn.chenghuan.wechatorder.service.IProductInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -28,6 +26,7 @@ import java.util.stream.Collectors;
  * @Date 2019/7/1 17:25
  */
 @Service
+@Transactional
 public class OrderService implements IOrderService {
 
     /**
@@ -86,8 +85,8 @@ public class OrderService implements IOrderService {
         orderMaster.setGid(UUID.randomUUID().toString().replace("-",""));
         orderMaster.setBuyerName(orderDTO.getBuyerName());
         orderMaster.setBuyerPhone(orderDTO.getBuyerPhone());
-        orderMaster.setBuyerAddress(orderMaster.getBuyerAddress());
-        orderMaster.setBuyerOpenid(orderMaster.getBuyerOpenid());
+        orderMaster.setBuyerAddress(orderDTO.getBuyerAddress());
+        orderMaster.setBuyerOpenid(orderDTO.getBuyerOpenid());
         orderMaster.setOrderAmount(calculateOrderAmount(orderDTO.getOrderDetailList()));
         orderMaster.setOrderStatus(OrderStatusEnum.NEW.getCode());
         orderMaster.setPayStatus(PayStatusEnum.UNFINISH.getCode());
@@ -104,11 +103,17 @@ public class OrderService implements IOrderService {
     private BigDecimal calculateOrderAmount(final List<OrderDetail> orderDetailList){
         BigDecimal orderAmount = new BigDecimal(BigInteger.ZERO);
         final List<String> gidList = orderDetailList.stream().map(OrderDetail::getProductId).collect(Collectors.toList());
+        //商品gid和商品数量对应
+        final Map<String,Integer> productIdAndAmountMap = new HashMap<>(orderDetailList.size());
+        orderDetailList.forEach(ele->
+            productIdAndAmountMap.put(ele.getProductId(),ele.getProductQuantity())
+        );
         //查询对应id的商品信息
         final List<ProductInfo> productInfoList = productInfoService.findByIds(gidList);
         for(int i = 0;i<productInfoList.size();i++){
            orderAmount = productInfoList.get(i).getProductPrice().
-                    multiply(new BigDecimal(orderDetailList.get(i).getProductQuantity())).add(orderAmount);
+                    multiply(new BigDecimal(productIdAndAmountMap.get(productInfoList.get(i).getGid())
+                    )).add(orderAmount);
         }
         return  orderAmount;
     }
@@ -122,6 +127,11 @@ public class OrderService implements IOrderService {
     private List<OrderDetail> buildOrderDetailList(final List<OrderDetail> orderDetailList,final String orderId){
         final List<OrderDetail> orderDetails = new ArrayList<>();
         final List<String> gidLists = orderDetailList.stream().map(OrderDetail::getProductId).collect(Collectors.toList());
+        //商品gid和商品数量对应
+        final Map<String,Integer> productIdAndAmountMap = new HashMap<>(orderDetailList.size());
+        orderDetailList.forEach(ele->
+                productIdAndAmountMap.put(ele.getProductId(),ele.getProductQuantity())
+        );
         final List<ProductInfo> productInfoList = productInfoDao.findByGidIn(gidLists);
         for (int i = 0; i < orderDetailList.size(); i++) {
             final Date date = new Date();
@@ -129,10 +139,10 @@ public class OrderService implements IOrderService {
             final ProductInfo productInfo = productInfoList.get(i);
             orderDetail.setGid(UUID.randomUUID().toString().replace("-",""));
             orderDetail.setOrderId(orderId);
-            orderDetail.setProductId(orderDetailList.get(i).getProductId());
+            orderDetail.setProductId(productInfo.getGid());
             orderDetail.setProductName(productInfo.getProductName());
             orderDetail.setProductPrice(productInfo.getProductPrice());
-            orderDetail.setProductQuantity(orderDetailList.get(i).getProductQuantity());
+            orderDetail.setProductQuantity(productIdAndAmountMap.get(productInfo.getGid()));
             orderDetail.setProductIcon(productInfo.getProductIcon());
             orderDetail.setCreateTime(date);
             orderDetail.setUpdateTime(date);
