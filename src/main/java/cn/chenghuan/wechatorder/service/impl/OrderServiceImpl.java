@@ -8,10 +8,13 @@ import cn.chenghuan.wechatorder.domain.OrderMaster;
 import cn.chenghuan.wechatorder.domain.ProductInfo;
 import cn.chenghuan.wechatorder.dto.CartDTO;
 import cn.chenghuan.wechatorder.dto.OrderDTO;
+import cn.chenghuan.wechatorder.enums.ExceptionEnum;
 import cn.chenghuan.wechatorder.enums.OrderStatusEnum;
 import cn.chenghuan.wechatorder.enums.PayStatusEnum;
+import cn.chenghuan.wechatorder.exception.EmptyValueException;
 import cn.chenghuan.wechatorder.service.IOrderService;
 import cn.chenghuan.wechatorder.service.IProductInfoService;
+import cn.chenghuan.wechatorder.utils.UuidUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,7 +30,7 @@ import java.util.stream.Collectors;
  */
 @Service
 @Transactional
-public class OrderService implements IOrderService {
+public class OrderServiceImpl implements IOrderService {
 
     /**
      * 商品service
@@ -82,7 +85,7 @@ public class OrderService implements IOrderService {
     private OrderMaster buildOrderMaster(final OrderDTO orderDTO){
         final OrderMaster orderMaster = new OrderMaster();
         final Date date = new Date();
-        orderMaster.setGid(UUID.randomUUID().toString().replace("-",""));
+        orderMaster.setGid(UuidUtils.createUUID());
         orderMaster.setBuyerName(orderDTO.getBuyerName());
         orderMaster.setBuyerPhone(orderDTO.getBuyerPhone());
         orderMaster.setBuyerAddress(orderDTO.getBuyerAddress());
@@ -103,13 +106,16 @@ public class OrderService implements IOrderService {
     private BigDecimal calculateOrderAmount(final List<OrderDetail> orderDetailList){
         BigDecimal orderAmount = new BigDecimal(BigInteger.ZERO);
         final List<String> gidList = orderDetailList.stream().map(OrderDetail::getProductId).collect(Collectors.toList());
+        //查询对应id的商品信息
+        final List<ProductInfo> productInfoList = productInfoService.findByIds(gidList);
+        if(productInfoList==null||productInfoList.size()==0||gidList.size()!=productInfoList.size()) {
+                throw new EmptyValueException(ExceptionEnum.EMPTY_VALUE, "对应商品");
+        }
         //商品gid和商品数量对应
         final Map<String,Integer> productIdAndAmountMap = new HashMap<>(orderDetailList.size());
         orderDetailList.forEach(ele->
             productIdAndAmountMap.put(ele.getProductId(),ele.getProductQuantity())
         );
-        //查询对应id的商品信息
-        final List<ProductInfo> productInfoList = productInfoService.findByIds(gidList);
         for(int i = 0;i<productInfoList.size();i++){
            orderAmount = productInfoList.get(i).getProductPrice().
                     multiply(new BigDecimal(productIdAndAmountMap.get(productInfoList.get(i).getGid())
@@ -125,29 +131,47 @@ public class OrderService implements IOrderService {
      * @return OrderDetail
      */
     private List<OrderDetail> buildOrderDetailList(final List<OrderDetail> orderDetailList,final String orderId){
-        final List<OrderDetail> orderDetails = new ArrayList<>();
         final List<String> gidLists = orderDetailList.stream().map(OrderDetail::getProductId).collect(Collectors.toList());
+        //商品异常检查
+        final List<ProductInfo> productInfoList = productInfoDao.findByGidIn(gidLists);
+        if(productInfoList==null||productInfoList.size()==0||gidLists.size()!=productInfoList.size()){
+            throw new EmptyValueException(ExceptionEnum.EMPTY_VALUE,"对应商品");
+        }
         //商品gid和商品数量对应
         final Map<String,Integer> productIdAndAmountMap = new HashMap<>(orderDetailList.size());
         orderDetailList.forEach(ele->
                 productIdAndAmountMap.put(ele.getProductId(),ele.getProductQuantity())
         );
-        final List<ProductInfo> productInfoList = productInfoDao.findByGidIn(gidLists);
-        for (int i = 0; i < orderDetailList.size(); i++) {
-            final Date date = new Date();
-            final OrderDetail orderDetail = new OrderDetail();
+        final List<OrderDetail> orderDetails = new ArrayList<>();
+        for (int i = 0; i < productInfoList.size(); i++) {
             final ProductInfo productInfo = productInfoList.get(i);
-            orderDetail.setGid(UUID.randomUUID().toString().replace("-",""));
-            orderDetail.setOrderId(orderId);
-            orderDetail.setProductId(productInfo.getGid());
-            orderDetail.setProductName(productInfo.getProductName());
-            orderDetail.setProductPrice(productInfo.getProductPrice());
-            orderDetail.setProductQuantity(productIdAndAmountMap.get(productInfo.getGid()));
-            orderDetail.setProductIcon(productInfo.getProductIcon());
-            orderDetail.setCreateTime(date);
-            orderDetail.setUpdateTime(date);
+            final OrderDetail orderDetail = buildOrderDetail(productInfo,
+                    orderId,productIdAndAmountMap.get(productInfo.getGid()));
             orderDetails.add(orderDetail);
         }
         return  orderDetails;
+    }
+
+    /**
+     * 构建订单明细
+     * @param productInfo
+     * @param orderId
+     * @param productAmount
+     * @return OrderDetail
+     */
+    private OrderDetail buildOrderDetail(final ProductInfo productInfo,
+                                         final String orderId,final Integer productAmount){
+        final Date date = new Date();
+        final OrderDetail orderDetail = new OrderDetail();
+        orderDetail.setGid(UuidUtils.createUUID());
+        orderDetail.setOrderId(orderId);
+        orderDetail.setProductId(productInfo.getGid());
+        orderDetail.setProductName(productInfo.getProductName());
+        orderDetail.setProductPrice(productInfo.getProductPrice());
+        orderDetail.setProductQuantity(productAmount);
+        orderDetail.setProductIcon(productInfo.getProductIcon());
+        orderDetail.setCreateTime(date);
+        orderDetail.setUpdateTime(date);
+        return orderDetail;
     }
 }

@@ -3,6 +3,9 @@ package cn.chenghuan.wechatorder.service.impl;
 import cn.chenghuan.wechatorder.dao.IProductInfoDao;
 import cn.chenghuan.wechatorder.domain.ProductInfo;
 import cn.chenghuan.wechatorder.dto.CartDTO;
+import cn.chenghuan.wechatorder.enums.ExceptionEnum;
+import cn.chenghuan.wechatorder.exception.AmountException;
+import cn.chenghuan.wechatorder.exception.EmptyValueException;
 import cn.chenghuan.wechatorder.service.IProductInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +22,7 @@ import java.util.stream.Collectors;
  * @Date 2019/6/3 21:51
  */
 @Service
-public class ProductInfoService implements IProductInfoService {
+public class ProductInfoServiceImpl implements IProductInfoService {
 
     /**
      * 商品DAO
@@ -72,12 +75,16 @@ public class ProductInfoService implements IProductInfoService {
            productIdAndAmountMap.put(ele.getProductId(),ele.getProductQuantity())
        );
        final List<ProductInfo> productInfoList = findByIds(productGids);
+       //扣减库存
        final List<ProductInfo> newProductInfoList = new ArrayList<>();
        for (int i = 0; i <productInfoList.size() ; i++) {
-           Integer productStock = productInfoList.get(i).getProductStock()-
-                   productIdAndAmountMap.get(productInfoList.get(i).getGid());
-           productInfoList.get(i).setProductStock(productStock);
-           newProductInfoList.add(productInfoList.get(i));
+           final ProductInfo productInfo = productInfoList.get(i);
+           if(productInfo.getProductStock()< productIdAndAmountMap.get(productInfo.getGid())){
+               throw  new AmountException(ExceptionEnum.AMOUNT_NO_ENOUGH,"对应的"+productInfo.getGid()+"商品");
+           }
+           Integer productStock = productInfo.getProductStock()- productIdAndAmountMap.get(productInfo.getGid());
+           productInfo.setProductStock(productStock);
+           newProductInfoList.add(productInfo);
        }
        productInfoDao.saveAll(newProductInfoList);
     }

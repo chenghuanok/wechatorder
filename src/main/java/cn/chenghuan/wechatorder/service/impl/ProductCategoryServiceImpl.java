@@ -16,7 +16,7 @@ import java.util.List;
  * @Date 2019/6/2 10:30
  */
 @Service
-public class ProductCategoryService implements IProductCategoryService {
+public class ProductCategoryServiceImpl implements IProductCategoryService {
 
     /**
      * 商品目录DAO
