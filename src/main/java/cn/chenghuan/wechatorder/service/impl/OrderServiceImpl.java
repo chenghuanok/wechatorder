@@ -15,7 +15,11 @@ import cn.chenghuan.wechatorder.exception.EmptyValueException;
 import cn.chenghuan.wechatorder.service.IOrderService;
 import cn.chenghuan.wechatorder.service.IProductInfoService;
 import cn.chenghuan.wechatorder.utils.UuidUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
@@ -29,7 +33,7 @@ import java.util.stream.Collectors;
  * @Date 2019/7/1 17:25
  */
 @Service
-@Transactional
+@Transactional(rollbackFor =Exception.class )
 public class OrderServiceImpl implements IOrderService {
 
     /**
@@ -75,6 +79,33 @@ public class OrderServiceImpl implements IOrderService {
         //4.保存订单
         orderMasterDao.save(orderMaster);
         orderDetailDao.saveAll(orderDetailList);
+    }
+
+    /**
+     * 根据订单GID查找订单
+     * @param orderId
+     * @return OrderDTO
+     */
+    @Override
+    public OrderDTO findOne(final String orderId) {
+        final OrderMaster orderMaster = orderMasterDao.findByGid(orderId);
+        if(orderMaster==null){
+            throw new EmptyValueException(ExceptionEnum.EMPTY_VALUE,"订单不存在");
+        }
+        final List<OrderDetail> orderDetailList = orderDetailDao.findByOrderId(orderId);
+        return buildOrderDTO(orderMaster,orderDetailList);
+    }
+
+    /**
+     * 分页查找对应用户的订单
+     * @param buyerOpenid
+     * @return Page<OrderDTO>
+     */
+    @Override
+    public Page<OrderMaster> findListByBuyerOpenid(final String buyerOpenid) {
+        final Pageable pageable = PageRequest.of(0,1);
+        Page<OrderMaster> orderMasters = orderMasterDao.findByBuyerOpenid(buyerOpenid,pageable);
+        return orderMasters;
     }
 
     /**
@@ -173,5 +204,18 @@ public class OrderServiceImpl implements IOrderService {
         orderDetail.setCreateTime(date);
         orderDetail.setUpdateTime(date);
         return orderDetail;
+    }
+
+    /**
+     * 构建订单
+     * @param orderMaster
+     * @param orderDetailList
+     * @return OrderDTO
+     */
+    private OrderDTO buildOrderDTO(final OrderMaster orderMaster,final List<OrderDetail> orderDetailList){
+        final OrderDTO orderDTO = new OrderDTO();
+        BeanUtils.copyProperties(orderMaster,orderDTO);
+        orderDTO.setOrderDetailList(orderDetailList);
+        return orderDTO;
     }
 }

@@ -21,4 +21,11 @@ public interface IOrderMasterDao extends JpaRepository<OrderMaster,String> {
      * @return  Page<OrderMaster>
      */
     Page<OrderMaster> findByBuyerOpenid(final String buyerOpenid, final Pageable pageable);
+
+    /**
+     * 查询订单详情
+     * @param gid
+     * @return
+     */
+    OrderMaster findByGid(final String gid);
 }

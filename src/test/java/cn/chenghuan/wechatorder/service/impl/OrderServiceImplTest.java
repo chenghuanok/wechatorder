@@ -1,12 +1,15 @@
 package cn.chenghuan.wechatorder.service.impl;
 
 import cn.chenghuan.wechatorder.domain.OrderDetail;
+import cn.chenghuan.wechatorder.domain.OrderMaster;
 import cn.chenghuan.wechatorder.dto.OrderDTO;
 import cn.chenghuan.wechatorder.service.IOrderService;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.test.context.junit4.SpringRunner;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +22,7 @@ import java.util.List;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class OrderServiceTest {
+public class OrderServiceImplTest {
 
     /**
      * 订单service
@@ -46,5 +49,17 @@ public class OrderServiceTest {
        orderDetailList.add(orderDetailTwo);
        orderDTO.setOrderDetailList(orderDetailList);
        orderService.createOrder(orderDTO);
+    }
+
+    @Test
+    public void findOne() {
+        final OrderDTO orderDTO = orderService.findOne("994e864cdec649678c3cf93cc53c30bd");
+        Assert.assertNotNull(orderDTO);
+    }
+
+    @Test
+    public void findListByBuyerOpenid(){
+        final Page<OrderMaster> orderMasters = orderService.findListByBuyerOpenid("888888");
+        Assert.assertNotNull(orderMasters);
     }
 }

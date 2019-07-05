@@ -1,6 +1,8 @@
 package cn.chenghuan.wechatorder.service;
 
+import cn.chenghuan.wechatorder.domain.OrderMaster;
 import cn.chenghuan.wechatorder.dto.OrderDTO;
+import org.springframework.data.domain.Page;
 
 /**
  * @author 程欢
@@ -14,4 +16,18 @@ public interface IOrderService {
      * @param orderDTO
      */
     void createOrder(final OrderDTO orderDTO);
+
+    /**
+     * 根据订单GID查找订单
+     * @param orderId
+     * @return OrderDTO
+     */
+    OrderDTO findOne(final String orderId);
+
+    /**
+     * 分页查找对应用户的订单
+     * @param buyerOpenid
+     * @return  Page<OrderMaster>
+     */
+    Page<OrderMaster> findListByBuyerOpenid(final String buyerOpenid);
 }
