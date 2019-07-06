@@ -135,6 +135,40 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     /**
+     * 完成订单
+     * @param orderId
+     */
+    @Override
+    public void finishOrder(final String orderId) {
+        //1.判断订单对应的状态
+        final OrderMaster orderMaster = orderMasterDao.findByGid(orderId);
+        if(!orderMaster.getOrderStatus().equals(OrderStatusEnum.NEW.getCode())){
+            throw new OrderException(ExceptionEnum.ORDER_STATUE_NO_MATCH,"订单状态");
+        }
+        //2.修改订单状态
+        orderMasterDao.updateOrderStatus(OrderStatusEnum.FINISH.getCode(),orderId,new Date());
+    }
+
+    /**
+     * 支付订单
+     * @param orderId
+     */
+    @Override
+    public void payOrder(final String orderId) {
+        //1.判断订单对应的状态
+        final OrderMaster orderMaster = orderMasterDao.findByGid(orderId);
+        if(!orderMaster.getOrderStatus().equals(OrderStatusEnum.NEW.getCode())){
+            throw new OrderException(ExceptionEnum.ORDER_STATUE_NO_MATCH,"订单状态");
+        }
+        //2.判断支付状态
+        if(!orderMaster.getPayStatus().equals(PayStatusEnum.UNFINISH.getCode())){
+            throw new OrderException(ExceptionEnum.ORDER_STATUE_NO_MATCH,"支付状态");
+        }
+        //3.修改支付状态
+        orderMasterDao.updateOrderPayStatus(PayStatusEnum.FINISHED.getCode(),orderId,new Date());
+    }
+
+    /**
      * 构建订单实体
      * @param orderDTO
      * @return OrderMaster

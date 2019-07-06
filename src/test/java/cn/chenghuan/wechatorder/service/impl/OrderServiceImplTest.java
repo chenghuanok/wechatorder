@@ -67,4 +67,14 @@ public class OrderServiceImplTest {
     public void cancelOrder(){
        orderService.cancelOrder("994e864cdec649678c3cf93cc53c30bd");
     }
+
+    @Test
+    public void finishOrder(){
+       orderService.finishOrder("994e864cdec649678c3cf93cc53c30bd");
+    }
+
+    @Test
+    public void payOrder(){
+       orderService.payOrder("994e864cdec649678c3cf93cc53c30bd");
+    }
 }

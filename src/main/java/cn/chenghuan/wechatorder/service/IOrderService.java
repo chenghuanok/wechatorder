@@ -36,4 +36,16 @@ public interface IOrderService {
      * @param orderId
      */
     void cancelOrder(final String orderId);
+
+    /**
+     * 完成订单
+     * @param orderId
+     */
+    void finishOrder(final String orderId);
+
+    /**
+     * 支付订单
+     * @param orderId
+     */
+    void payOrder(final String orderId);
 }

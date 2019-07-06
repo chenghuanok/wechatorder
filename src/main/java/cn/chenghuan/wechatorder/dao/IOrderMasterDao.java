@@ -46,4 +46,17 @@ public interface IOrderMasterDao extends JpaRepository<OrderMaster,String> {
     int updateOrderStatus(@Param(value = "orderStatus") final Integer orderStatus,
                           @Param(value = "gid") final String gid,
                           @Param(value = "updateTime") final Date updateTime);
+
+    /**
+     * 修改订单支付状态
+     * @param payStatus
+     * @param gid
+     * @param updateTime
+     * @return int
+     */
+    @Modifying
+    @Query(value = "update OrderMaster om set om.payStatus=:payStatus,om.updateTime=:updateTime where om.gid=:gid")
+    int updateOrderPayStatus(@Param(value = "payStatus") final Integer payStatus,
+                             @Param(value = "gid") final String gid,
+                             @Param(value = "updateTime") final Date updateTime);
 }
