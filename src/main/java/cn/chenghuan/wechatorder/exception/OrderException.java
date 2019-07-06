@@ -4,11 +4,10 @@ import cn.chenghuan.wechatorder.enums.ExceptionEnum;
 
 /**
  * @author 程欢
- * @Description 空值异常
- * @Date 2019/7/3 8:51
+ * @Description 订单异常
+ * @Date 2019/7/6 11:11
  */
-public class EmptyValueException extends RuntimeException {
-
+public class OrderException extends RuntimeException{
     /**
      * 异常码
      */
@@ -18,7 +17,7 @@ public class EmptyValueException extends RuntimeException {
      * 构造方法
      * @param exceptionEnum
      */
-    public EmptyValueException(ExceptionEnum exceptionEnum,String exceptionDetail) {
+    public OrderException(ExceptionEnum exceptionEnum, String exceptionDetail) {
         super(exceptionDetail+exceptionEnum.getMessage());
         this.code = exceptionEnum.getCode();
     }

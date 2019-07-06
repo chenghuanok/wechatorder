@@ -37,4 +37,10 @@ public interface IProductInfoService {
      * @param cartDTOS
      */
     void decreaseProductStock(final List<CartDTO> cartDTOS);
+
+    /**
+     * 增加商品库存
+     * @param cartDTOS
+     */
+    void increaseProductStock(final List<CartDTO> cartDTOS);
 }

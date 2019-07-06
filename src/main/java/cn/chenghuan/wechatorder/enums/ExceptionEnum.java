@@ -16,6 +16,8 @@ public enum ExceptionEnum {
     EMPTY_VALUE(0,"为空"),
 
     AMOUNT_NO_ENOUGH(1,"数量不足"),
+
+    ORDER_STATUE_NO_MATCH(2,"不正确"),
     ;
 
 

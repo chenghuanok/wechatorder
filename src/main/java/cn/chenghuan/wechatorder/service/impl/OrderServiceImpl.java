@@ -12,6 +12,7 @@ import cn.chenghuan.wechatorder.enums.ExceptionEnum;
 import cn.chenghuan.wechatorder.enums.OrderStatusEnum;
 import cn.chenghuan.wechatorder.enums.PayStatusEnum;
 import cn.chenghuan.wechatorder.exception.EmptyValueException;
+import cn.chenghuan.wechatorder.exception.OrderException;
 import cn.chenghuan.wechatorder.service.IOrderService;
 import cn.chenghuan.wechatorder.service.IProductInfoService;
 import cn.chenghuan.wechatorder.utils.UuidUtils;
@@ -99,13 +100,38 @@ public class OrderServiceImpl implements IOrderService {
     /**
      * 分页查找对应用户的订单
      * @param buyerOpenid
-     * @return Page<OrderDTO>
+     * @return Page<OrderMaster>
      */
     @Override
     public Page<OrderMaster> findListByBuyerOpenid(final String buyerOpenid) {
         final Pageable pageable = PageRequest.of(0,1);
-        Page<OrderMaster> orderMasters = orderMasterDao.findByBuyerOpenid(buyerOpenid,pageable);
+        final Page<OrderMaster> orderMasters = orderMasterDao.findByBuyerOpenid(buyerOpenid,pageable);
         return orderMasters;
+    }
+
+    /**
+     * 取消订单
+     * @param orderId
+     */
+    @Override
+    public void cancelOrder(final String orderId) {
+        //1.判断对应的订单状态
+        final OrderMaster orderMaster = orderMasterDao.findByGid(orderId);
+        if(!orderMaster.getOrderStatus().equals(OrderStatusEnum.NEW.getCode())){
+           throw new OrderException(ExceptionEnum.ORDER_STATUE_NO_MATCH,"订单状态");
+        }
+        //2.修改订单状态
+        orderMasterDao.updateOrderStatus(OrderStatusEnum.CANCEL.getCode(),orderId,new Date());
+        //3.增加商品库存
+        final List<OrderDetail> orderDetailList = orderDetailDao.findByOrderId(orderId);
+        List<CartDTO> cartDTOList = orderDetailList.stream().map(ele->
+            new CartDTO(ele.getProductId(),ele.getProductQuantity())
+        ).collect(Collectors.toList());
+        productInfoService.increaseProductStock(cartDTOList);
+        //4.若已支付，退款
+        if(orderMaster.getPayStatus().equals(PayStatusEnum.FINISHED.getCode())){
+            //TODO
+        }
     }
 
     /**

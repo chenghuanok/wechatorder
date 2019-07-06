@@ -62,4 +62,9 @@ public class OrderServiceImplTest {
         final Page<OrderMaster> orderMasters = orderService.findListByBuyerOpenid("888888");
         Assert.assertNotNull(orderMasters);
     }
+
+    @Test
+    public void cancelOrder(){
+       orderService.cancelOrder("994e864cdec649678c3cf93cc53c30bd");
+    }
 }

@@ -30,4 +30,10 @@ public interface IOrderService {
      * @return  Page<OrderMaster>
      */
     Page<OrderMaster> findListByBuyerOpenid(final String buyerOpenid);
+
+    /**
+     * 取消订单
+     * @param orderId
+     */
+    void cancelOrder(final String orderId);
 }
