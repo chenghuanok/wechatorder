@@ -22,4 +22,14 @@ public class EmptyValueException extends RuntimeException {
         super(exceptionDetail+exceptionEnum.getMessage());
         this.code = exceptionEnum.getCode();
     }
+
+    /**
+     * 构造方法
+     * @param code
+     * @param message
+     */
+    public EmptyValueException(Integer code,String message){
+         super(message);
+         this.code = code;
+    }
 }
