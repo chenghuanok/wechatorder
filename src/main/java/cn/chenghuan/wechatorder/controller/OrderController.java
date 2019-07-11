@@ -5,6 +5,7 @@ import cn.chenghuan.wechatorder.dto.OrderDTO;
 import cn.chenghuan.wechatorder.enums.ExceptionEnum;
 import cn.chenghuan.wechatorder.exception.EmptyValueException;
 import cn.chenghuan.wechatorder.service.IOrderService;
+import cn.chenghuan.wechatorder.utils.ResultVOUtil;
 import cn.chenghuan.wechatorder.vo.OrderVO;
 import cn.chenghuan.wechatorder.vo.ResultVO;
 import com.alibaba.fastjson.JSON;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +26,7 @@ import java.util.Map;
  * @Date 2019/7/7 20:11
  */
 @RestController
-@RequestMapping("/buyer/order/create")
+@RequestMapping("/buyer/order")
 public class OrderController {
 
     /**
@@ -40,16 +42,18 @@ public class OrderController {
      * @param bindingResult
      * @return ResultVO<Map<String,String>>
      */
-    @PostMapping
-    public ResultVO<Map<String,String>> create(@Valid @RequestBody final OrderVO orderVO,
+    @PostMapping("/create")
+    public ResultVO<Map<String,String>> create(@Valid  @RequestBody  final OrderVO orderVO,
                                                final BindingResult bindingResult){
         if (bindingResult.hasErrors()) {
            throw new EmptyValueException(ExceptionEnum.EMPTY_VALUE.getCode(),
                    bindingResult.getFieldError().getDefaultMessage());
         }
         final OrderDTO orderDTO = orderVOTransferOrderDTO(orderVO);
-        orderService.createOrder(orderDTO);
-        return null;
+        final String orderId = orderService.createOrder(orderDTO);
+        final Map<String,String> orderIdMap = new HashMap<>(1);
+        orderIdMap.put("orderId",orderId);
+        return ResultVOUtil.success(orderIdMap);
     }
 
     /**

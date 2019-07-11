@@ -66,7 +66,7 @@ public class OrderServiceImpl implements IOrderService {
      * @param orderDTO
      */
     @Override
-    public void createOrder(final OrderDTO orderDTO) {
+    public String createOrder(final OrderDTO orderDTO) {
         //1、构建订单实体
         final OrderMaster orderMaster = buildOrderMaster(orderDTO);
         //2.构建订单详情
@@ -80,6 +80,7 @@ public class OrderServiceImpl implements IOrderService {
         //4.保存订单
         orderMasterDao.save(orderMaster);
         orderDetailDao.saveAll(orderDetailList);
+        return orderMaster.getGid();
     }
 
     /**

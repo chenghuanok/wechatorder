@@ -14,8 +14,9 @@ public interface IOrderService {
     /**
      * 创建订单
      * @param orderDTO
+     * @Return String
      */
-    void createOrder(final OrderDTO orderDTO);
+    String createOrder(final OrderDTO orderDTO);
 
     /**
      * 根据订单GID查找订单
