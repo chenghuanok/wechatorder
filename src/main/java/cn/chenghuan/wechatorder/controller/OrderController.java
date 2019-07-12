@@ -9,12 +9,10 @@ import cn.chenghuan.wechatorder.utils.ResultVOUtil;
 import cn.chenghuan.wechatorder.vo.OrderVO;
 import cn.chenghuan.wechatorder.vo.ResultVO;
 import com.alibaba.fastjson.JSON;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +25,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/buyer/order")
+@Slf4j
 public class OrderController {
 
     /**
@@ -54,6 +53,16 @@ public class OrderController {
         final Map<String,String> orderIdMap = new HashMap<>(1);
         orderIdMap.put("orderId",orderId);
         return ResultVOUtil.success(orderIdMap);
+    }
+
+    /**
+     * 完成订单
+     * @param orderId
+     */
+    @PostMapping("/finishOrder")
+    public void finishOrder(@RequestParam(value = "orderId",required = true) final String orderId){
+          log.info(orderId);
+          orderService.finishOrder(orderId);
     }
 
     /**
