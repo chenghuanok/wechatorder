@@ -66,6 +66,16 @@ public class OrderController {
     }
 
     /**
+     * 取消订单
+     * @param orderId
+     */
+    @PostMapping("/cancelOrder")
+    public void cancelOrder(@RequestParam(value = "orderId",required = true) final String orderId){
+        log.info(orderId);
+        orderService.cancelOrder(orderId);
+    }
+
+    /**
      * orderVO转orderDTO
      * @param orderVO
      * @return OrderDTO
