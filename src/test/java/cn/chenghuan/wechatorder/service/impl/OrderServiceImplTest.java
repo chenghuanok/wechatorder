@@ -10,6 +10,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.junit4.SpringRunner;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,6 +64,15 @@ public class OrderServiceImplTest {
         final Page<OrderMaster> orderMasters = orderService.findListByBuyerOpenid("888888");
         Assert.assertNotNull(orderMasters);
     }
+
+
+    @Test
+    public void findList(){
+        final Pageable pageable = PageRequest.of(0,2);
+        final Page<OrderMaster> orderMasters = orderService.findList(pageable);
+        Assert.assertNotNull(orderMasters);
+    }
+
 
     @Test
     public void cancelOrder(){

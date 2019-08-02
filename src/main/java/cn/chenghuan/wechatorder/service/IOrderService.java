@@ -3,6 +3,7 @@ package cn.chenghuan.wechatorder.service;
 import cn.chenghuan.wechatorder.domain.OrderMaster;
 import cn.chenghuan.wechatorder.dto.OrderDTO;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 /**
  * @author 程欢
@@ -31,6 +32,13 @@ public interface IOrderService {
      * @return  Page<OrderMaster>
      */
     Page<OrderMaster> findListByBuyerOpenid(final String buyerOpenid);
+
+    /**
+     * 分页查询所有订单
+     * @param pageable
+     * @return Page<OrderMaster>
+     */
+    Page<OrderMaster> findList(final Pageable pageable);
 
     /**
      * 取消订单

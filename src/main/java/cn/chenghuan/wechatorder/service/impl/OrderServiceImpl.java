@@ -111,6 +111,17 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     /**
+     * 分页查询所有订单
+     *
+     * @param pageable
+     * @return Page<OrderMaster>
+     */
+    @Override
+    public Page<OrderMaster> findList(final Pageable pageable) {
+        return orderMasterDao.findAll(pageable);
+    }
+
+    /**
      * 取消订单
      * @param orderId
      */

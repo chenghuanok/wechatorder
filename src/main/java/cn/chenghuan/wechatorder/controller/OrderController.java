@@ -1,6 +1,7 @@
 package cn.chenghuan.wechatorder.controller;
 
 import cn.chenghuan.wechatorder.domain.OrderDetail;
+import cn.chenghuan.wechatorder.domain.OrderMaster;
 import cn.chenghuan.wechatorder.dto.OrderDTO;
 import cn.chenghuan.wechatorder.enums.ExceptionEnum;
 import cn.chenghuan.wechatorder.exception.EmptyValueException;
@@ -11,6 +12,9 @@ import cn.chenghuan.wechatorder.vo.ResultVO;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
@@ -53,6 +57,19 @@ public class OrderController {
         final Map<String,String> orderIdMap = new HashMap<>(1);
         orderIdMap.put("orderId",orderId);
         return ResultVOUtil.success(orderIdMap);
+    }
+
+    /**
+     * 分页查询对应页码的数据
+     * @param page
+     * @param size
+     * @return Page<OrderMaster>
+     */
+    @GetMapping("/findList")
+    public Page<OrderMaster> findList(@RequestParam(name = "page") final int page,
+                                      @RequestParam(name = "size") final int size){
+        final Pageable pageable = PageRequest.of(page,size);
+        return orderService.findList(pageable);
     }
 
     /**
