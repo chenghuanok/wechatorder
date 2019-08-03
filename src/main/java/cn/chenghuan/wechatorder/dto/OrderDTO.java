@@ -1,6 +1,10 @@
 package cn.chenghuan.wechatorder.dto;
 
 import cn.chenghuan.wechatorder.domain.OrderDetail;
+import cn.chenghuan.wechatorder.enums.OrderStatusEnum;
+import cn.chenghuan.wechatorder.enums.PayStatusEnum;
+import cn.chenghuan.wechatorder.utils.EnumUtil;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -61,6 +65,7 @@ public class OrderDTO implements Serializable {
     /**
      *创建时间
      */
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date createTime;
 
     /**
@@ -72,4 +77,20 @@ public class OrderDTO implements Serializable {
      * 订单详情list
      */
     private List<OrderDetail> orderDetailList;
+
+    /**
+     * 获取对应code的订单状态枚举
+     * @return OrderStatusEnum
+     */
+    public OrderStatusEnum getOrderStatusEnum(){
+           return EnumUtil.getByCode(orderStatus,OrderStatusEnum.class);
+    }
+
+    /**
+     * 获取对应code的支付状态枚举
+     * @return PayStatusEnum
+     */
+    public PayStatusEnum getPayStatusEnum(){
+        return EnumUtil.getByCode(payStatus,PayStatusEnum.class);
+    }
 }
