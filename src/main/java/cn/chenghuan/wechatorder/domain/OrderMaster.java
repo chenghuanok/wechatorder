@@ -1,5 +1,6 @@
 package cn.chenghuan.wechatorder.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -76,6 +77,7 @@ public class OrderMaster implements Serializable {
      */
     @Column(name = "create_time",nullable = false)
     @Temporal(value = TemporalType.TIMESTAMP)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date createTime;
 
     /**
@@ -83,5 +85,6 @@ public class OrderMaster implements Serializable {
      */
     @Column(name = "update_time",nullable = false)
     @Temporal(value = TemporalType.TIMESTAMP)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date updateTime;
 }
