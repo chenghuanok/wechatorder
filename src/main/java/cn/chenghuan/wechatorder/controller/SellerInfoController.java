@@ -1,8 +1,12 @@
 package cn.chenghuan.wechatorder.controller;
 
 import cn.chenghuan.wechatorder.domain.SellerInfo;
+import cn.chenghuan.wechatorder.enums.ExceptionEnum;
+import cn.chenghuan.wechatorder.exception.EmptyValueException;
 import cn.chenghuan.wechatorder.service.ISellerInfoService;
+import cn.chenghuan.wechatorder.utils.ResultVOUtil;
 import cn.chenghuan.wechatorder.utils.UuidUtils;
+import cn.chenghuan.wechatorder.vo.ResultVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +23,7 @@ import java.util.concurrent.TimeUnit;
  * @Description 卖家controller
  * @Date 2019/8/14 22:20
  */
-@Api(description = "卖家接口")
+@Api(value = "卖家接口")
 @RestController
 @RequestMapping("/buyer/seller")
 @Slf4j
@@ -50,5 +54,12 @@ public class SellerInfoController {
       final SellerInfo sellerInfo = sellerInfoService.findByOpenId(openId);
       final String token = UuidUtils.createUUID();
       redisTemplate.opsForValue().set("token",token,7200,TimeUnit.SECONDS);
+    }
+
+    @GetMapping("/exceptionTest")
+    public ResultVO exceptionTest(){
+        System.out.println("进入测试异常方法");
+        throw new EmptyValueException(ExceptionEnum.EMPTY_VALUE,"值为空");
+       // return ResultVOUtil.success("成功");
     }
 }

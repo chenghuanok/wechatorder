@@ -29,4 +29,25 @@ public final class ResultVOUtil {
     public static ResultVO success(){
         return  success(null);
     }
+
+    /**
+     * 失败
+     * @param object
+     * @return ResultVO
+     */
+    public static ResultVO fail(final Object object){
+        final ResultVO resultVO = new ResultVO();
+        resultVO.setCode(1);
+        resultVO.setMsg("失败");
+        resultVO.setData(object);
+        return  resultVO;
+    }
+
+    /**
+     * 失败(没有参数)
+     * @return ResultVO
+     */
+    public static ResultVO fail(){
+        return  fail(null);
+    }
 }
