@@ -10,6 +10,13 @@ import cn.chenghuan.wechatorder.vo.ResultVO;
 public final class ResultVOUtil {
 
     /**
+     * 私有构造函数
+     */
+    private ResultVOUtil(){
+
+    }
+
+    /**
      * 成功
      * @param object
      * @return ResultVO
@@ -17,7 +24,6 @@ public final class ResultVOUtil {
     public static ResultVO success(final Object object){
          final ResultVO resultVO = new ResultVO();
          resultVO.setCode(0);
-         resultVO.setMsg("成功");
          resultVO.setData(object);
          return  resultVO;
     }
@@ -32,22 +38,14 @@ public final class ResultVOUtil {
 
     /**
      * 失败
-     * @param object
+     * @param code
+     * @param errorMsg
      * @return ResultVO
      */
-    public static ResultVO fail(final Object object){
+    public static ResultVO fail(final int code,final String errorMsg){
         final ResultVO resultVO = new ResultVO();
-        resultVO.setCode(1);
-        resultVO.setMsg("失败");
-        resultVO.setData(object);
+        resultVO.setCode(code);
+        resultVO.setErrorMsg(errorMsg);
         return  resultVO;
-    }
-
-    /**
-     * 失败(没有参数)
-     * @return ResultVO
-     */
-    public static ResultVO fail(){
-        return  fail(null);
     }
 }

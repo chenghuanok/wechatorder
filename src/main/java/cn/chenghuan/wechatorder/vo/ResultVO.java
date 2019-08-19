@@ -3,7 +3,6 @@ package cn.chenghuan.wechatorder.vo;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-
 import java.io.Serializable;
 
 /**
@@ -23,7 +22,7 @@ public class ResultVO<T> implements Serializable {
     /**
      * 提示信息
      */
-    private String msg;
+    private String errorMsg;
 
     /**
      * 返回具体信息

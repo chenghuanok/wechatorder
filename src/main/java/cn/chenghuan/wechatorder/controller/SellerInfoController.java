@@ -1,5 +1,6 @@
 package cn.chenghuan.wechatorder.controller;
 
+import cn.chenghuan.wechatorder.domain.ProductInfo;
 import cn.chenghuan.wechatorder.domain.SellerInfo;
 import cn.chenghuan.wechatorder.enums.ExceptionEnum;
 import cn.chenghuan.wechatorder.exception.EmptyValueException;
@@ -59,7 +60,10 @@ public class SellerInfoController {
     @GetMapping("/exceptionTest")
     public ResultVO exceptionTest(){
         System.out.println("进入测试异常方法");
-        throw new EmptyValueException(ExceptionEnum.EMPTY_VALUE,"值为空");
-       // return ResultVOUtil.success("成功");
+        //throw new EmptyValueException(ExceptionEnum.EMPTY_VALUE,"值为空");
+        ProductInfo productInfo = null;
+        productInfo.getGid();
+        return null;
+        //return ResultVOUtil.success("成功");
     }
 }
